@@ -52,6 +52,8 @@ unsigned yaffs_traceMask=0;
 unsigned chunkSize = 2048;
 unsigned spareSize = 64;
 
+extern int ignore_data_media;
+
 const char * mkyaffsimage_c_version = "$Id: mkyaffs2image.c,v 1.2 2005/12/13 00:34:58 tpoynor Exp $";
 
 
@@ -320,8 +322,10 @@ static int process_directory(int parent, const char *path, int fixstats, mkyaffs
 		{
 		
 			/* Ignore . and .. */
+			/* and /data/media */
 			if(strcmp(entry->d_name,".") &&
-			   strcmp(entry->d_name,".."))
+			   strcmp(entry->d_name,"..") &&
+			   (!ignore_data_media || strcmp(path,"/data/media")))
  			{
  				char full_name[PATH_MAX];
 				struct stat stats;
